@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+    db:
+        image: mysql:8
+        environment:
+            MYSQL_USER: tmserver
+            MYSQL_PASSWORD: example
+            MYSQL_DATABASE: tmdb
+            MYSQL_ROOT_PASSWORD: example
+        networks:
+            - tmserver
+
+    tmserver:
+        image: stvnkwlzk/trackmania2020:latest
+        environment:
+            SERVER_NAME: servername
+            SERVER_LOGIN: testlogin
+            SERVER_PASSWORD: serverpasswort
+        networks:
+            - tmserver
+
+    evosc:
+        image: evosc
+        depends_on: 
+            - db
+            - tmserver
+        command: ["wait-for-it", "db:3306", "--", "./evo.sh"]
+        environment: 
+            SERVER_LOGIN: testlogin
+            SERVER_HOST: tmserver
+            RPC_PORT: 5000
+            RPC_LOGIN: ServerAdmin
+            RPC_PASSWORD: ServerAdmin
+            MAP_LIST: maplist.txt
+            MYSQL_HOST: db
+            MYSQL_DB: tmdb
+            MYSQL_USER: tmserver
+            MYSQL_PASSWORD: example
+        networks:
+            - tmserver
+        volumes:
+            - ./configs:/evosc/config/
+
+networks:
+    tmserver:
