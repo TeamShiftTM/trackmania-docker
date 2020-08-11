@@ -6,8 +6,7 @@ RUN apt update && \
 WORKDIR /tmserver
 RUN wget http://files.v04.maniaplanet.com/server/TrackmaniaServer_Latest.zip && \
     unzip TrackmaniaServer_Latest.zip && \
-    rm TrackmaniaServer_Latest.zip && \
-    ls
+    rm TrackmaniaServer_Latest.zip
 
 WORKDIR /tmserver/UserData/Config
 RUN mv dedicated_cfg.default.txt dedicated_cfg.txt
